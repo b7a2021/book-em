@@ -5,8 +5,10 @@ import java.util.stream.Stream;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import telran.b7a.book.model.Book;
 
@@ -18,14 +20,16 @@ public class BookRepositoryImpl implements BookRepository {
 
 	@Override
 	public Stream<Book> findByAuthorsName(String authorName) {
-		// TODO Auto-generated method stub
-		return null;
+		TypedQuery<Book> query = em.createQuery("select b from Book b join b.authors a where a.name=?1", Book.class);
+		query.setParameter(1, authorName);
+		return query.getResultStream();
 	}
 
 	@Override
 	public Stream<Book> findByPublisherPublisherName(String publisherName) {
-		// TODO Auto-generated method stub
-		return null;
+		TypedQuery<Book> query = em.createQuery("select b from Book b join b.publisher p where p.publisherName=?1", Book.class);
+		query.setParameter(1, publisherName);
+		return query.getResultStream();
 	}
 
 	@Override
@@ -34,9 +38,11 @@ public class BookRepositoryImpl implements BookRepository {
 	}
 
 	@Override
+//	@Transactional
 	public Book save(Book book) {
-		// TODO Auto-generated method stub
-		return null;
+//		em.merge(book);
+		em.persist(book);
+		return book;
 	}
 
 	@Override
@@ -46,8 +52,15 @@ public class BookRepositoryImpl implements BookRepository {
 
 	@Override
 	public void delete(Book book) {
-		// TODO Auto-generated method stub
+		em.remove(book);
 
+	}
+
+	@Override
+	@Transactional
+	public void delete(String isbn) {
+		Book book = em.find(Book.class, isbn);
+		em.remove(book);		
 	}
 
 }

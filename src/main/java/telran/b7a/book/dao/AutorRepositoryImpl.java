@@ -22,13 +22,13 @@ public class AutorRepositoryImpl implements AuthorRepository {
 
 	@Override
 	public Author save(Author author) {
-		// TODO Auto-generated method stub
-		return null;
+		em.persist(author);
+		return author;
 	}
 
 	@Override
 	public void delete(Author author) {
-		// TODO Auto-generated method stub
+		em.remove(author);
 
 	}
 

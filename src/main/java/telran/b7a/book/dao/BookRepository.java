@@ -17,4 +17,6 @@ public interface BookRepository{
 	Optional<Book> findById(String id);
 
 	void delete(Book book);
+	
+	void delete(String isbn);
 }
